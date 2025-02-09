@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 
 const Section2 = () => {
   const videoRef = useRef(null);
@@ -19,6 +19,18 @@ const Section2 = () => {
       video.play(); // Force the video to continue playing
     }
   };
+
+  // Prevent fullscreen mode
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.addEventListener("fullscreenchange", () => {
+        if (document.fullscreenElement) {
+          document.exitFullscreen(); // Exit fullscreen if entered
+        }
+      });
+    }
+  }, []);
 
   return (
     <>
@@ -246,6 +258,7 @@ const Section2 = () => {
             autoPlay
             muted
             loop
+            playsInline // Ensures video plays inline on iOS
             controls={false}
             onClick={handleVideoClick}
             onPause={handleVideoPause}
